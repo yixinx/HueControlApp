@@ -2,20 +2,6 @@ var  http = require("http"),
     url = require("url"),
     fs = require("fs");
 
-var callback = function(response){
-    var str = ''
-    response.on('data', function(chunk){
-        str += chunk
-    })
-    response.on('end', function(){
-        console.log(str)
-    })
-};
-
-var availableLightsGet = function(){
-
-
-};
 
 module.exports = {
 	controlPut: function(status, bright){
@@ -35,16 +21,27 @@ module.exports = {
 		    "method": "PUT",
 		    "headers": headers
 		}
-		http.request(options, callback).write(bodyString);
+		http.request(options).write(bodyString);
 	},
 
-	infoGet: function(){
+	infoGet: function(response){
 	    var options = {
 		    "host": "192.168.0.12",
 		    "path": "/api/qheFK7aEy9jwiZXI1gECL9Oe1DRcdReWPeKJiEm2/lights",
 		    "method": "GET"
 		}
-		http.request(options, callback).end();
-		}
+		http.request(options, function(res){
+		    var str = ''
+		    res.on('data', function(chunk){
+		        str += chunk
+		    })
+		    res.on('end', function(){
+		    	console.log(str);
+		        response.writeHeader(200, {"Content-Type": "text/json"});
+		        response.write(str);
+		        response.end();
+		    })
+		}).end();
 
+	}
 }
