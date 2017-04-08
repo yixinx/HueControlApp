@@ -2,44 +2,20 @@ var  http = require("http"),
     url = require("url"),
     fs = require("fs");
 
-var bodyString = JSON.stringify({
-    on: false,
-    bri: 50
-});
-
-var headers = {
-    'Content-Type': 'application/json',
-    'Content-Length': bodyString.length
-};
-
-    var options = {
-    "host": "192.168.0.12",
-    "path": "/api/qheFK7aEy9jwiZXI1gECL9Oe1DRcdReWPeKJiEm2/lights/3/state",
-    "method": "PUT",
-    "headers": headers
-}
-
-callback = function(response) {
-    console.log("reach callback")
-    var str = ''
-    response.on('data', function(chunk){
-        str += chunk
-    })
-
-    response.on('end', function(){
-        console.log(str)
-    })
-}
+var lights = require("./api/lights");
 
 http.createServer(function(request, response) {
     var uri = url.parse(request.url).pathname;
     console.log(uri)
     switch(uri){
-        case '/':
-            http.request(options, callback).write(bodyString);
+        case '/control':
+            lights.controlPut(true, 50);
         break;
-        case 'info':
-            renderFile('info.html', response);
+        case '/lights-info':
+            lights.infoGet();
+        break;
+        case '/bridge-info':
+            bridge.infoGet();
         break;
         default:
             response.writeHeader(404, {"Content-Type": "text/plain"});
