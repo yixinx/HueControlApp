@@ -1,6 +1,7 @@
 var  http = require("http"),
     url = require("url"),
-    fs = require("fs");
+    fs = require("fs"),
+    mustache = require('mustache');
 
 
 module.exports = {
@@ -36,7 +37,7 @@ module.exports = {
 		        str += chunk
 		    })
 		    res.on('end', function(){
-		    	console.log(str);
+		    	console.log(JSON.parse(str));
 		        response.writeHeader(200, {"Content-Type": "text/json"});
 		        response.write(str);
 		        response.end();

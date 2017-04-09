@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Index</title>
+  <meta name="YixinXue" content="SitePoint">
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+</head>
+<body>
+	<h1>Welcome</h1>
+	<button type="button" class="btn">Get Information</button>
+
+<script id="mustacheTempalte_a" type="text/template">
+		<div class="item">
+			<h1>Upcoming Shows</h1>
+			{{3.state.on}}
+		</div>
+	</script>
+<div class="target-output" data-template-chosen="a"></div>
+
+</body>
+<script>
+$('.btn').click(function() {
+  $.ajax({
+    type:"GET",
+    url:"/test",
+    success: function(data) {
+ 		console.log("Data recieved!");
+ 		var targetContainer = $(".target-output"),
+	    templateDefined = $(".target-output").data("template-chosen"),
+	    template = $("#mustacheTempalte_"+templateDefined).html();
+		var html = Mustache.to_html(template, data);
+		$(targetContainer).html(html);
+    }
+  });  
+});
+
+</script>
+</html>
