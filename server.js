@@ -1,6 +1,7 @@
 var http = require("http"),
     fs = require('fs'),
-    url = require("url");
+    url = require("url"),
+    qs = require('querystring');
 
 var lights = require("./api/lights");
 var helper = require("./helper");
@@ -17,11 +18,18 @@ http.createServer(function(request, response) {
         });
         break;
         case '/get-info':
-            console.log("Get");
+            console.log("Get get-info command!");
             lights.infoGet(response);
         break;
         case '/control':
-            lights.controlPut(true, 50);
+            console.log("Get control command!");
+            var body = '';
+                request.on('data', function(chunk) {
+                  body += chunk;
+                });
+                request.on('end', function() {
+                    lights.controlPut(body);
+                });
         break;
         case '/create-user':
         break;

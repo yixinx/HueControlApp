@@ -5,15 +5,15 @@ var  http = require("http"),
 
 
 module.exports = {
-	controlPut: function(status, bright){
-		var bodyString = JSON.stringify({
-		    on: status,
-		    bri: bright
-		});
+	controlPut: function(data){
+		var controlData = data;
+		console.log(controlData);
+		// var bodyString = JSON.stringify(data);
+		// console.log("bodyString " + bodyString);
 
 		var headers = {
-		    'Content-Type': 'application/json',
-		    'Content-Length': bodyString.length
+		    'Content-Type': 'text/json',
+		    "Access-Control-Allow-Origin": "*"
 		};
 
 	    var options = {
@@ -22,7 +22,7 @@ module.exports = {
 		    "method": "PUT",
 		    "headers": headers
 		}
-		http.request(options).write(bodyString);
+		http.request(options).write(controlData);
 	},
 
 	infoGet: function(response){
@@ -37,9 +37,9 @@ module.exports = {
 		        str += chunk
 		    })
 		    res.on('end', function(){
-		    	console.log(JSON.parse(str));
 		        response.writeHeader(200, {"Content-Type": "text/json"});
 		        response.write(str);
+		        console.log(JSON.parse(str));
 		        response.end();
 		    })
 		}).end();

@@ -5,25 +5,52 @@
   <meta charset="utf-8">
   <title>Index</title>
   <meta name="YixinXue" content="SitePoint">
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
 <body>
 	<h1>Welcome</h1>
 
 	<div class="get-info" data-template-chosen="a"></div>
 	<button type="button" class="btn-get-info">Lights info</button>
+	<div class="form-group row">
+		<label for="example-text-input" class="col-2 col-form-label">On/Off</label>
+		<div class="col-2">
+			<input class="on-off" id="example-text-input">
+		</div>
+	</div>
+	<div class="form-group row">
+		<label for="example-text-input" class="col-2 col-form-label">brightness</label>
+		<div class="col-2">
+			<input class="brightness" id="example-text-input">
+		</div>
+	</div>
+
 	<button type="button" class="btn-ctl-lights">Control lights</button>
 	<button type="button" class="btn-create-user">Create user</button>
-<script id="get-info-templ" type="text/template">
-		<div class="item">
-			{{3.state.on}}
-		</div>
-	</script>
 
 </body>
+<script id="get-info-templ" type="text/template">
+	<div>
+		{{#3}}
+		{{#state}}
+		{{on}}{{bri}}
+		{{/state}}
+		{{type}}
+		{{name}}
+		{{/3}}
+	</div>
+</script>
+
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script>
 $( document ).ready(function() {
+
 	// Get lights information
 	$('.btn-get-info').click(function() {
 	  	$.ajax({
@@ -44,10 +71,16 @@ $( document ).ready(function() {
 
 	// Control lights
 	$('.btn-ctl-lights').click(function(){
+
+		var status = $(".on-off").val();
+		var brightness = $(".brightness").val();
+		console.log(status + brightness);
+		console.log(typeof(status)+typeof(brightness));
 		$.ajax({
 			type:"POST",
 			url:"/control",
-			data:'{"on": "true", "bri": "100"}',
+			dataType: "json",
+  			data:JSON.stringify({"on":status=="on", "bri": parseInt(brightness, 10)}),
 			success: function(data){
 				console.log("Command received!");
 			},
