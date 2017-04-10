@@ -13,21 +13,7 @@
 	<!-- Bootstrap toggle -->
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.7.3/css/bootstrap-slider.css">
-
-	<style type="text/css">
-		h3{
-			text-align: center;
-		}
-		.jumbotron{
-		    margin-bottom: 0px;
-		    background-image: url(http://www.ohgizmo.com/wp-content/uploads/2016/11/Smart-LED-Bulbs-740x493.jpg);
-		    background-position: 0% 20%;
-		    background-size: cover;
-		    background-repeat: no-repeat;
-		    color: white;
-		    text-shadow: black 0.3em 0.3em 0.3em;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="./style.css">
 
 </head>
 <body>
@@ -39,8 +25,8 @@
       </div>
     </div>
 
-    <div class="container" style="text-align:center;">
-      <div class="row" style="max-height: 500px;">
+    <div class="container" >
+      <div class="row" style="max-height: 500px; text-align: center;">
        	<!-- lights info -->
         <div class="col-md-4">
           <h3>Lights information</h3>
@@ -50,16 +36,22 @@
        	<!-- control lights -->
         <div class="col-md-4">
           <h3>Control Light</h3>
-				<div><h4>Switch</h4></div>
-      			<div>
-      				<input type="checkbox" id="toggle" checked data-toggle="toggle">
-      			</div>
-				<div>
-				<h4 for="example-text-input" class="col-2 col-form-label">brightness</h4>
-				</div>
-				<div>
-					<input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="254" data-slider-step="1" data-slider-value="127"/>
-				</div>
+			<div class="ctl-panel">
+				<h4>Switch</h4>
+  				<input type="checkbox" id="toggle" checked data-toggle="toggle">
+  			</div>
+  			<div class="ctl-panel">
+				<h4>brightness</h4>
+				<input id="slider-bri" type="text" data-slider-min="0" data-slider-max="254" data-slider-step="1" data-slider-value="127"/>
+			</div>
+			<div class="ctl-panel">
+				<h4>Saturation (Not supported)</h4>
+				<input id="slider-sat" type="text" data-slider-min="0" data-slider-max="254" data-slider-step="1" data-slider-value="127"/>
+			</div>
+			<div class="ctl-panel">
+				<h4>Hue Value (Not supported)</h4>
+				<input id="slider-hue" type="text" data-slider-min="0" data-slider-max="65535" data-slider-step="1" data-slider-value="32767"/>
+			</div>
 			<a class="btn btn-primary btn-ctl-lights" role="button">Submit</a>
        </div>
        	<!-- groups info -->
@@ -71,9 +63,13 @@
       </div>
        	<!-- create new user -->
       <div class="row">
-          <h3>Create New User</h3>
-          <a class="btn btn-primary btn-create-user" role="button">Create</a> 
-  	</div>
+		  	<div class="col-lg-3">
+		      <h3>Create New User</h3>
+		  	</div>
+		  	<div class="col-lg-2">
+		  		<a class="btn btn-primary btn-create-user" role="button">Create</a> 
+		  	</div>
+	   </div>
   </div>
 
 </body>
@@ -129,11 +125,13 @@
 $( document ).ready(function() {
 
 	var sliderValue;
-	$('#ex1').slider({
+	$('#slider-bri').slider({
 		formatter: function(value) {
 			sliderValue = value;
 		}
 	});
+	$('#slider-hue').slider();
+	$('#slider-sat').slider();
 	// Get lights information
 	$('.btn-lights-info').click(function() {
 	  	$.ajax({
