@@ -10,39 +10,98 @@
 
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
 </head>
 <body>
-	<h1>Welcome</h1>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h2 class="display-3">Welcome!</h2>
+        <p>For seamless integration into your smart home!</p>
+      </div>
+    </div>
 
-	<div class="get-info" data-template-chosen="a"></div>
-	<button type="button" class="btn-get-info">Lights info</button>
-	<div class="form-group row">
-		<label for="example-text-input" class="col-2 col-form-label">On/Off</label>
-		<div class="col-2">
-			<input class="on-off" id="example-text-input">
-		</div>
-	</div>
-	<div class="form-group row">
-		<label for="example-text-input" class="col-2 col-form-label">brightness</label>
-		<div class="col-2">
-			<input class="brightness" id="example-text-input">
-		</div>
-	</div>
+    <div class="container">
+      <div class="row" style="max-height: 500px;">
+       	<!-- lights info -->
+        <div class="col-md-4">
+          <h3>Lights information</h3>
+          	<div class="lights-info" data-template-chosen="a"></div>
+            <a class="btn btn-primary btn-lights-info" role="button">Lights info</a>
+        </div>
+       	<!-- control lights -->
+        <div class="col-md-4">
+          <h3>Control Light</h3>
+			<div class="form-group row">
+				<label for="example-text-input" class="col-2 col-form-label">On/Off</label>
+				<div class="col-2">
+					<input class="on-off" id="example-text-input">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="example-text-input" class="col-2 col-form-label">brightness</label>
+				<div class="col-2">
+					<input class="brightness" id="example-text-input">
+				</div>
+			</div>
 
-	<button type="button" class="btn-ctl-lights">Control lights</button>
-	<button type="button" class="btn-create-user">Create user</button>
+			<a class="btn btn-primary btn-ctl-lights" role="button">Control lights</a>
+       </div>
+       	<!-- groups info -->
+        <div class="col-md-4">
+          <h3>Groups Info</h3>
+        	<div class="groups-info" data-template-chosen="a"></div>
+          	<a class="btn btn-primary btn-group-info" role="button">Groups info</a>
+        </div>
+      </div>
+       	<!-- create new user -->
+      <div class="row">
+          <h3>Create New User</h3>
+          <a class="btn btn-primary btn-create-user" role="button">Create</a> 
+  	</div>
+  </div>
 
 </body>
-<script id="get-info-templ" type="text/template">
-	<div>
-		{{#3}}
-		{{#state}}
-		{{on}}{{bri}}
-		{{/state}}
-		{{type}}
-		{{name}}
-		{{/3}}
-	</div>
+
+<script id="lights-info-templ" type="text/template">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Attribute</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#3}}
+    <tr><td>state</td><td>{{state.on}}</td></tr>
+    <tr><td>brightness</td><td>{{state.bri}}</td></tr>
+    <tr><td>name</td><td>{{name}}</td></tr>
+    <tr><td>type</td><td>{{type}}</td></tr>
+    <tr><td>modelid</td><td>{{modelid}}</td></tr>
+    <tr><td>manufacturername</td><td>{{manufacturername}}</td></tr>
+    {{/3}}
+  </tbody>
+</table>
+</script>
+
+<script id="groups-info-templ" type="text/template">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Attribute</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#1}}
+    <tr><td>name</td><td>{{name}}</td></tr>
+    <tr><td>type</td><td>{{type}}</td></tr>
+    <tr><td>lights</td><td>{{lights}}</td></tr>
+    <tr><td>all on</td><td>{{state.all_on}}</td></tr>
+    <tr><td>any on</td><td>{{state.any_on}}</td></tr>
+    {{/1}}
+  </tbody>
+</table>
 </script>
 
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -52,15 +111,33 @@
 $( document ).ready(function() {
 
 	// Get lights information
-	$('.btn-get-info').click(function() {
+	$('.btn-lights-info').click(function() {
 	  	$.ajax({
 		    type:"GET",
-		    url:"/get-info",
+		    url:"/lights-info",
 		    success: function(data) {
 		 		console.log("Information recieved!");
-			    template = $("#get-info-templ").html();
+			    template = $("#lights-info-templ").html();
 				var html = Mustache.to_html(template, data);
-				$(".get-info").html(html);
+				$(".lights-info").html(html);
+		    },
+			error: function (xhr, status, error) {
+				console.log('Error: ' + error.message);
+				$(targetContainer).html('Error: info not received.');
+			}
+	  	});  
+	});
+
+	// Get groups information
+	$('.btn-group-info').click(function() {
+	  	$.ajax({
+		    type:"GET",
+		    url:"/groups-info",
+		    success: function(data) {
+		 		console.log("Information recieved!");
+			    template = $("#groups-info-templ").html();
+				var html = Mustache.to_html(template, data);
+				$(".groups-info").html(html);
 		    },
 			error: function (xhr, status, error) {
 				console.log('Error: ' + error.message);

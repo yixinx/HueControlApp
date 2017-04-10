@@ -5,9 +5,12 @@ var http = require("http"),
 
 var lights = require("./api/lights");
 var helper = require("./helper");
+var bridge = require("./api/bridge");
 var mustache = require('mustache');
+var router = require("./api/router");
 
 http.createServer(function(request, response) {
+    console.log(request.url);
     var uri = url.parse(request.url).pathname;
     switch(uri){
         case '/':
@@ -17,9 +20,12 @@ http.createServer(function(request, response) {
             response.end();
         });
         break;
-        case '/get-info':
-            console.log("Get get-info command!");
-            lights.infoGet(response);
+        case '/lights-info':
+            console.log("Get lights-info command!");
+            lights.infoGet("lights", response);
+        break;
+        case '/groups-info':
+            lights.infoGet("groups", response);
         break;
         case '/control':
             console.log("Get control command!");
@@ -32,6 +38,7 @@ http.createServer(function(request, response) {
                 });
         break;
         case '/create-user':
+            bridge.createUser(response);
         break;
         default:
             response.writeHeader(404, {"Content-Type": "text/plain"});

@@ -4,12 +4,11 @@ var  http = require("http"),
 
 
 module.exports = {
-	controlPut: function(data){
-		var controlData = data;
-		console.log(controlData);
-		// var bodyString = JSON.stringify(data);
-		// console.log("bodyString " + bodyString);
-
+	createUser: function(response){
+		
+		var bodyString = JSON.stringify({
+		    devicetype: 'my_hue_app#iphone peter'
+		});
 		var headers = {
 		    'Content-Type': 'text/json',
 		    "Access-Control-Allow-Origin": "*"
@@ -17,19 +16,9 @@ module.exports = {
 
 	    var options = {
 		    "host": "192.168.0.12",
-		    "path": "/api/qheFK7aEy9jwiZXI1gECL9Oe1DRcdReWPeKJiEm2/lights/3/state",
-		    "method": "PUT",
+		    "path": "/api",
+		    "method": "POST",
 		    "headers": headers
-		}
-		http.request(options).write(controlData);
-	},
-
-	infoGet: function(type, response){
-		console.log(type);
-	    var options = {
-		    "host": "192.168.0.12",
-		    "path": "/api/qheFK7aEy9jwiZXI1gECL9Oe1DRcdReWPeKJiEm2/"+type,
-		    "method": "GET"
 		}
 		http.request(options, function(res){
 		    var str = ''
@@ -42,7 +31,6 @@ module.exports = {
 		        console.log(JSON.parse(str));
 		        response.end();
 		    })
-		}).end();
-
+		}).write(bodyString);
 	}
 }
