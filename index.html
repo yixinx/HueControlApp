@@ -10,6 +10,24 @@
 
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<!-- Bootstrap toggle -->
+	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.7.3/css/bootstrap-slider.css">
+
+	<style type="text/css">
+		h3{
+			text-align: center;
+		}
+		.jumbotron{
+		    margin-bottom: 0px;
+		    background-image: url(http://www.ohgizmo.com/wp-content/uploads/2016/11/Smart-LED-Bulbs-740x493.jpg);
+		    background-position: 0% 20%;
+		    background-size: cover;
+		    background-repeat: no-repeat;
+		    color: white;
+		    text-shadow: black 0.3em 0.3em 0.3em;
+		}
+	</style>
 
 </head>
 <body>
@@ -21,7 +39,7 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" style="text-align:center;">
       <div class="row" style="max-height: 500px;">
        	<!-- lights info -->
         <div class="col-md-4">
@@ -32,24 +50,21 @@
        	<!-- control lights -->
         <div class="col-md-4">
           <h3>Control Light</h3>
-			<div class="form-group row">
-				<label for="example-text-input" class="col-2 col-form-label">On/Off</label>
-				<div class="col-2">
-					<input class="on-off" id="example-text-input">
+				<div><h4>Switch</h4></div>
+      			<div>
+      				<input type="checkbox" id="toggle" checked data-toggle="toggle">
+      			</div>
+				<div>
+				<h4 for="example-text-input" class="col-2 col-form-label">brightness</h4>
 				</div>
-			</div>
-			<div class="form-group row">
-				<label for="example-text-input" class="col-2 col-form-label">brightness</label>
-				<div class="col-2">
-					<input class="brightness" id="example-text-input">
+				<div>
+					<input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="254" data-slider-step="1" data-slider-value="127"/>
 				</div>
-			</div>
-
-			<a class="btn btn-primary btn-ctl-lights" role="button">Control lights</a>
+			<a class="btn btn-primary btn-ctl-lights" role="button">Submit</a>
        </div>
        	<!-- groups info -->
         <div class="col-md-4">
-          <h3>Groups Info</h3>
+          <h3>Groups Information</h3>
         	<div class="groups-info" data-template-chosen="a"></div>
           	<a class="btn btn-primary btn-group-info" role="button">Groups info</a>
         </div>
@@ -97,6 +112,7 @@
     <tr><td>name</td><td>{{name}}</td></tr>
     <tr><td>type</td><td>{{type}}</td></tr>
     <tr><td>lights</td><td>{{lights}}</td></tr>
+    <tr><td>class</td><td>{{class}}</td></tr>
     <tr><td>all on</td><td>{{state.all_on}}</td></tr>
     <tr><td>any on</td><td>{{state.any_on}}</td></tr>
     {{/1}}
@@ -107,9 +123,17 @@
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.7.3/bootstrap-slider.js"></script>
 <script>
 $( document ).ready(function() {
 
+	var sliderValue;
+	$('#ex1').slider({
+		formatter: function(value) {
+			sliderValue = value;
+		}
+	});
 	// Get lights information
 	$('.btn-lights-info').click(function() {
 	  	$.ajax({
@@ -141,29 +165,25 @@ $( document ).ready(function() {
 		    },
 			error: function (xhr, status, error) {
 				console.log('Error: ' + error.message);
-				$(targetContainer).html('Error: info not received.');
 			}
 	  	});  
 	});
 
 	// Control lights
 	$('.btn-ctl-lights').click(function(){
-
-		var status = $(".on-off").val();
-		var brightness = $(".brightness").val();
-		console.log(status + brightness);
-		console.log(typeof(status)+typeof(brightness));
+		var status = $("#toggle").prop('checked');
+		console.log(status);
+		console.log(sliderValue);
 		$.ajax({
 			type:"POST",
 			url:"/control",
 			dataType: "json",
-  			data:JSON.stringify({"on":status=="on", "bri": parseInt(brightness, 10)}),
+  			data:JSON.stringify({"on":status, "bri": sliderValue}),
 			success: function(data){
 				console.log("Command received!");
 			},
 			error: function (xhr, status, error) {
 			    console.log('Error: ' + error.message);
-			    $(targetContainer).html('Error: command not received.');
 			}
 		});
 	});
@@ -177,8 +197,8 @@ $( document ).ready(function() {
 				console.log("New user created!");
 			},
 			error: function (xhr, status, error) {
-			    console.log('Error: ' + error.message);
-			    $(targetContainer).html('Error: please push physical button first.');
+			    console.log('Error: please push physical button first.');
+
 			}
 		});
 	});
