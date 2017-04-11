@@ -28,9 +28,32 @@ module.exports = {
 		    res.on('end', function(){
 		        response.writeHeader(200, {"Content-Type": "text/json"});
 		        response.write(str);
-		        console.log(JSON.parse(str));
 		        response.end();
 		    })
 		}).write(bodyString);
+	},
+
+	uploadUser: function(username, response){
+		console.log(username);
+
+	    var options = {
+		    "host": "192.168.0.12",
+		    "path": "/api/" + username,
+		    "method": "GET"
+		}
+		http.request(options, function(res){
+		    var str = ''
+		    res.on('data', function(chunk){
+		        str += chunk
+		    })
+		    res.on('end', function(){
+		        console.log(JSON.parse(str));
+		        response.writeHeader(200, {"Content-Type": "text/json"});
+		        response.write(str);
+		        response.end();
+		    })
+		}).end();
+
+
 	}
 }

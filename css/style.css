@@ -11,3 +11,14 @@
 			margin-top: 25px;
 			margin-bottom: 25px;
 		}
+
+		.input-user{
+			margin-top: 20px;
+			margin-left: 20px;
+			margin-right: 20px; 
+		}
+
+		.new-user-field{
+			margin: 5px;
+			font-size: 14px;
+		}

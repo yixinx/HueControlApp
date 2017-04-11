@@ -7,8 +7,6 @@ module.exports = {
 	controlPut: function(data){
 		var controlData = data;
 		console.log(controlData);
-		// var bodyString = JSON.stringify(data);
-		// console.log("bodyString " + bodyString);
 
 		var headers = {
 		    'Content-Type': 'text/json',

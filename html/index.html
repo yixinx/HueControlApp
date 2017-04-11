@@ -25,7 +25,25 @@
       </div>
     </div>
 
-    <div class="container" >
+    <div class="container">
+    	       	<!-- create new user -->
+      <div class="row input-user">
+		  	<div class="col-md-3">
+				<h4>Do you have a user name?</h4>
+			</div>
+			<div class="col-md-5">
+				<div class="form-group">
+					<input class="form-control" id="existing-user" aria-describedby="help" placeholder="User name">
+					<div class="row new-username"></div>
+					<small id="help" class="form-text text-muted"></small>
+				</div>
+			</div>
+			<div class="col-md-4">
+		      <a class="btn btn-primary btn-submit-user" role="button">Submit</a>
+		      <a class="btn btn-primary btn-create-user" role="button">Create One</a>
+		  	</div>
+	   </div>
+
       <div class="row" style="max-height: 500px; text-align: center;">
        	<!-- lights info -->
         <div class="col-md-4">
@@ -61,15 +79,6 @@
           	<a class="btn btn-primary btn-group-info" role="button">Groups info</a>
         </div>
       </div>
-       	<!-- create new user -->
-      <div class="row">
-		  	<div class="col-lg-3">
-		      <h3>Create New User</h3>
-		  	</div>
-		  	<div class="col-lg-2">
-		  		<a class="btn btn-primary btn-create-user" role="button">Create</a> 
-		  	</div>
-	   </div>
   </div>
 
 </body>
@@ -82,7 +91,9 @@
 <script>
 $(document).ready(function() {
 
+	var userName;
 	var sliderValue;
+
 	$('#slider-bri').slider({
 		formatter: function(value) {
 			sliderValue = value;
@@ -147,10 +158,39 @@ $(document).ready(function() {
 			type:"GET",
 			url:"/create-user",
 			success: function(data){
-				console.log("New user created!");
+				if(data[0].error == undefined){
+					userName = data[0].success.username;
+					$('.form-control').hide();
+					$('.new-username').text(userName).show();
+					$('#help').text("You have automatically registered with this new username!");
+				}else{
+					$('#help').text(data[0].error.description);
+				}
 			},
 			error: function (xhr, status, error) {
-			    console.log('Error: please push physical button first.');
+			    console.log('Error: ' + error.message);
+			}
+		});
+	});
+
+	// Submit a existing user
+	$('.btn-submit-user').click(function(){
+		var inputUsername = $('#existing-user').val();
+		console.log(inputUsername);
+		$.ajax({
+			type: "POST",
+			url: "/upload-user",
+			data: inputUsername,
+			success: function(data){
+				if(data[0] == undefined){
+					$('#help').text("Your user name is verified!");
+					userName = inputUsername;
+				}else{
+					$('#help').text("Your user name is invalid.");
+				}
+			},
+			error: function (xhr, status, error) {
+ 			    console.log('Error: ' + error.message);
 			}
 		});
 	});

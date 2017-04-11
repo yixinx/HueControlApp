@@ -6,7 +6,7 @@ var http = require("http"),
 var lights = require("./api/lights");
 var helper = require("./js/helper");
 var bridge = require("./api/bridge");
-var mustache = require('mustache');
+var mustache = require('./js/mustache');
 
 http.createServer(function(request, response) {
     console.log(request.url);
@@ -34,6 +34,16 @@ http.createServer(function(request, response) {
         break;
         case '/create-user':
             bridge.createUser(response);
+        break;
+        case '/upload-user':
+            console.log("Get upload user command!");
+            var body = '';
+                request.on('data', function(chunk) {
+                  body += chunk;
+                });
+                request.on('end', function() {
+                    bridge.uploadUser(body, response);
+                });
         break;
         default:
             if (helper.renderFile(uri, response) == false){
