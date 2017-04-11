@@ -11,24 +11,39 @@ var mustache = require('./js/mustache');
 http.createServer(function(request, response) {
     console.log(request.url);
     var uri = url.parse(request.url).pathname;
+    var userName = '';
     switch(uri){
         case '/':
             helper.renderFile('/html/index.html', response);
         break;
         case '/lights-info':
-            console.log("Get lights-info command!");
-            lights.infoGet("lights", response);
+                request.on('data', function(chunk) {
+                    userName += chunk;
+                });
+                request.on('end', function() {
+                    console.log("Server: lights-info received");
+                    console.log("Server: lights-info with username " + userName);
+                    lights.infoGet(userName, "lights", response);
+                });
         break;
         case '/groups-info':
-            lights.infoGet("groups", response);
+                request.on('data', function(chunk) {
+                    userName += chunk;
+                });
+                request.on('end', function() {
+                    console.log("Server: groups-info received");
+                    console.log("Server: groups-info with username " + userName);
+                    lights.infoGet(userName, "groups", response);
+                });
         break;
         case '/control':
-            console.log("Get control command!");
             var body = '';
                 request.on('data', function(chunk) {
                   body += chunk;
                 });
                 request.on('end', function() {
+                    console.log("Server: control received");
+                    console.log("Server: control with " + body);
                     lights.controlPut(body);
                 });
         break;

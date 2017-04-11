@@ -104,10 +104,12 @@ $(document).ready(function() {
 	// Get lights information
 	$('.btn-lights-info').click(function() {
 	  	$.ajax({
-		    type:"GET",
+		    type:"POST",
 		    url:"/lights-info",
+		    data:userName,
 		    success: function(data) {
-		 		console.log("Lights information recieved!");
+                console.log("Server: lights-info received");
+                console.log("Server: lights-info with username " + userName);
 				var html = Mustache.to_html(lightsTemplate, data);
 				$(".lights-info").html(html);
 		    },
@@ -120,10 +122,12 @@ $(document).ready(function() {
 	// Get groups information
 	$('.btn-group-info').click(function() {
 	  	$.ajax({
-		    type:"GET",
+		    type:"POST",
 		    url:"/groups-info",
+		    data: userName,
 		    success: function(data) {
-		 		console.log("Groups information recieved!");
+                console.log("Server: groups-info received");
+                console.log("Server: groups-info with username " + userName);
 				var html = Mustache.to_html(groupsTemplate, data);
 				$(".groups-info").html(html);
 		    },
@@ -136,15 +140,15 @@ $(document).ready(function() {
 	// Control lights
 	$('.btn-ctl-lights').click(function(){
 		var status = $("#toggle").prop('checked');
-		console.log(status);
-		console.log(sliderValue);
 		$.ajax({
 			type:"POST",
 			url:"/control",
 			dataType: "json",
-  			data:JSON.stringify({"on":status, "bri": sliderValue}),
+  			data:JSON.stringify({"on":status, "bri": sliderValue, "username": userName}),
 			success: function(data){
-				console.log("Command received!");
+                console.log("Client: control received");
+                console.log("Client: control with username: " + userName
+                	+ " status: " + status + " brightness: " + sliderValue);
 			},
 			error: function (xhr, status, error) {
 			    console.log('Error: ' + error.message);

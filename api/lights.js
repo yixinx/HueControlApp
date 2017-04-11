@@ -2,12 +2,9 @@ var  http = require("http"),
     url = require("url"),
     fs = require("fs");
 
-
 module.exports = {
 	controlPut: function(data){
-		var controlData = data;
-		console.log(controlData);
-
+		var jsonData = JSON.parse(data);
 		var headers = {
 		    'Content-Type': 'text/json',
 		    "Access-Control-Allow-Origin": "*"
@@ -15,18 +12,18 @@ module.exports = {
 
 	    var options = {
 		    "host": "192.168.0.12",
-		    "path": "/api/qheFK7aEy9jwiZXI1gECL9Oe1DRcdReWPeKJiEm2/lights/3/state",
+		    "path": "/api/" + jsonData.username + "/lights/3/state",
 		    "method": "PUT",
 		    "headers": headers
-		}
-		http.request(options).write(controlData);
+		};
+		delete jsonData.username;
+		http.request(options).write(JSON.stringify(jsonData));
 	},
 
-	infoGet: function(type, response){
-		console.log(type);
+	infoGet: function(userName, type, response){
 	    var options = {
 		    "host": "192.168.0.12",
-		    "path": "/api/qheFK7aEy9jwiZXI1gECL9Oe1DRcdReWPeKJiEm2/"+type,
+		    "path": "/api/" + userName + "/" +type,
 		    "method": "GET"
 		}
 		http.request(options, function(res){
@@ -35,12 +32,11 @@ module.exports = {
 		        str += chunk
 		    })
 		    res.on('end', function(){
+		        console.log(JSON.parse(str));
 		        response.writeHeader(200, {"Content-Type": "text/json"});
 		        response.write(str);
-		        console.log(JSON.parse(str));
 		        response.end();
 		    })
 		}).end();
-
 	}
 }
