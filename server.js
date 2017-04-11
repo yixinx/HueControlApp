@@ -4,17 +4,16 @@ var http = require("http"),
     qs = require('querystring');
 
 var lights = require("./api/lights");
-var helper = require("./helper");
+var helper = require("./js/helper");
 var bridge = require("./api/bridge");
 var mustache = require('mustache');
-var router = require("./api/router");
 
 http.createServer(function(request, response) {
     console.log(request.url);
     var uri = url.parse(request.url).pathname;
     switch(uri){
         case '/':
-            helper.renderFile('./index.html', response);
+            helper.renderFile('/html/index.html', response);
         break;
         case '/lights-info':
             console.log("Get lights-info command!");

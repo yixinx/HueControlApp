@@ -5,7 +5,7 @@ module.exports = {
 
         console.log(filename + "renderfile"); 
         if(filename.indexOf('.html') != -1){
-            fs.readFile('./html' + filename, function (err, data){
+            fs.readFile('.' + filename, function (err, data){
             response.writeHeader(200, {'Content-Type': 'text/html','Content-Length':data.length});
             response.write(data);
             response.end();
@@ -14,7 +14,7 @@ module.exports = {
         }
 
         if(filename.indexOf('.css') != -1){
-            fs.readFile('./css' + filename,function (err, data){
+            fs.readFile('.' + filename,function (err, data){
             response.writeHeader(200, {'Content-Type': 'text/css'});
             response.write(data);
             response.end();
@@ -23,7 +23,7 @@ module.exports = {
         }
 
         if(filename.indexOf('.js') != -1){
-            fs.readFile('./js' + filename, function (err, data){
+            fs.readFile('.' + filename, function (err, data){
                 if(err) {
                     response.writeHeader(500, {"Content-Type": "text/plain"});
                     response.write(err + "\n");

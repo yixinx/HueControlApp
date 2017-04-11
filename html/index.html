@@ -13,7 +13,7 @@
 	<!-- Bootstrap toggle -->
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.7.3/css/bootstrap-slider.css">
-	<link rel="stylesheet" type="text/css" href="./style.css">
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
 
 </head>
 <body>
@@ -73,56 +73,14 @@
   </div>
 
 </body>
-
-<script id="lights-info-templ" type="text/template">
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Attribute</th>
-      <th>Value</th>
-    </tr>
-  </thead>
-  <tbody>
-  {{#3}}
-    <tr><td>state</td><td>{{state.on}}</td></tr>
-    <tr><td>brightness</td><td>{{state.bri}}</td></tr>
-    <tr><td>name</td><td>{{name}}</td></tr>
-    <tr><td>type</td><td>{{type}}</td></tr>
-    <tr><td>modelid</td><td>{{modelid}}</td></tr>
-    <tr><td>manufacturername</td><td>{{manufacturername}}</td></tr>
-    {{/3}}
-  </tbody>
-</table>
-</script>
-
-<script id="groups-info-templ" type="text/template">
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Attribute</th>
-      <th>Value</th>
-    </tr>
-  </thead>
-  <tbody>
-  {{#1}}
-    <tr><td>name</td><td>{{name}}</td></tr>
-    <tr><td>type</td><td>{{type}}</td></tr>
-    <tr><td>lights</td><td>{{lights}}</td></tr>
-    <tr><td>class</td><td>{{class}}</td></tr>
-    <tr><td>all on</td><td>{{state.all_on}}</td></tr>
-    <tr><td>any on</td><td>{{state.any_on}}</td></tr>
-    {{/1}}
-  </tbody>
-</table>
-</script>
-
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.7.3/bootstrap-slider.js"></script>
+	<script type="text/javascript" src="./js/template.js"></script>
+  	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+  	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  	<script type="text/javascript" src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.7.3/bootstrap-slider.js"></script>
 <script>
-$( document ).ready(function() {
+$(document).ready(function() {
 
 	var sliderValue;
 	$('#slider-bri').slider({
@@ -138,14 +96,12 @@ $( document ).ready(function() {
 		    type:"GET",
 		    url:"/lights-info",
 		    success: function(data) {
-		 		console.log("Information recieved!");
-			    template = $("#lights-info-templ").html();
-				var html = Mustache.to_html(template, data);
+		 		console.log("Lights information recieved!");
+				var html = Mustache.to_html(lightsTemplate, data);
 				$(".lights-info").html(html);
 		    },
 			error: function (xhr, status, error) {
 				console.log('Error: ' + error.message);
-				$(targetContainer).html('Error: info not received.');
 			}
 	  	});  
 	});
@@ -156,9 +112,8 @@ $( document ).ready(function() {
 		    type:"GET",
 		    url:"/groups-info",
 		    success: function(data) {
-		 		console.log("Information recieved!");
-			    template = $("#groups-info-templ").html();
-				var html = Mustache.to_html(template, data);
+		 		console.log("Groups information recieved!");
+				var html = Mustache.to_html(groupsTemplate, data);
 				$(".groups-info").html(html);
 		    },
 			error: function (xhr, status, error) {
@@ -196,7 +151,6 @@ $( document ).ready(function() {
 			},
 			error: function (xhr, status, error) {
 			    console.log('Error: please push physical button first.');
-
 			}
 		});
 	});
