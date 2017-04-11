@@ -9,7 +9,6 @@ var bridge = require("./api/bridge");
 var mustache = require('./js/mustache');
 
 http.createServer(function(request, response) {
-    console.log(request.url);
     var uri = url.parse(request.url).pathname;
     var userName = '';
     switch(uri){
@@ -48,16 +47,17 @@ http.createServer(function(request, response) {
                 });
         break;
         case '/create-user':
+            console.log("Server: create-user received");
             bridge.createUser(response);
         break;
         case '/upload-user':
-            console.log("Get upload user command!");
-            var body = '';
                 request.on('data', function(chunk) {
-                  body += chunk;
+                  userName += chunk;
                 });
                 request.on('end', function() {
-                    bridge.uploadUser(body, response);
+                    console.log("Server: upload-user received");
+                    console.log("Server: upload-user with username " + userName);
+                    bridge.uploadUser(userName, response);
                 });
         break;
         default:

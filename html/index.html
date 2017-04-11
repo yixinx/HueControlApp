@@ -180,7 +180,6 @@ $(document).ready(function() {
 	// Submit a existing user
 	$('.btn-submit-user').click(function(){
 		var inputUsername = $('#existing-user').val();
-		console.log(inputUsername);
 		$.ajax({
 			type: "POST",
 			url: "/upload-user",

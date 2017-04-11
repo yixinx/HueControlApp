@@ -3,7 +3,6 @@ var fs = require("fs");
 module.exports = {
     renderFile: function(filename, response){
 
-        console.log(filename + "renderfile"); 
         if(filename.indexOf('.html') != -1){
             fs.readFile('.' + filename, function (err, data){
             response.writeHeader(200, {'Content-Type': 'text/html','Content-Length':data.length});
