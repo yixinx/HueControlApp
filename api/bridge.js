@@ -1,16 +1,14 @@
-var  http = require("http"),
-    url = require("url"),
-    fs = require("fs");
+var  http = require("http");
 
 module.exports = {
-	createUser: function(response){
+	createUser: function(host, response){
 		var data = JSON.stringify({devicetype: 'my_hue_app#iphone peter'});
 		var headers = {
 		    'Content-Type': 'text/json',
 		    "Access-Control-Allow-Origin": "*"
 		};
 	    var options = {
-		    "host": "192.168.0.12",
+		    "host": host,
 		    "path": "/api",
 		    "method": "POST",
 		    "headers": headers
@@ -29,9 +27,9 @@ module.exports = {
 		}).write(data);
 	},
 
-	uploadUser: function(uerName, response){
+	uploadUser: function(host, uerName, response){
 	    var options = {
-		    "host": "192.168.0.12",
+		    "host": host,
 		    "path": "/api/" + uerName,
 		    "method": "GET"
 		}

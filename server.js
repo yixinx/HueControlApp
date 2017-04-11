@@ -1,7 +1,5 @@
 var http = require("http"),
-    fs = require('fs'),
-    url = require("url"),
-    qs = require('querystring');
+    url = require("url");
 
 var lights = require("./api/lights");
 var helper = require("./js/helper");
@@ -11,6 +9,8 @@ var mustache = require('./js/mustache');
 http.createServer(function(request, response) {
     var uri = url.parse(request.url).pathname;
     var userName = '';
+    var host = "192.168.0.12";
+
     switch(uri){
         case '/':
             helper.renderFile('/html/index.html', response);
@@ -22,7 +22,7 @@ http.createServer(function(request, response) {
                 request.on('end', function() {
                     console.log("Server: lights-info received");
                     console.log("Server: lights-info with username " + userName);
-                    lights.infoGet(userName, "lights", response);
+                    lights.infoGet(host, userName, "lights", response);
                 });
         break;
         case '/groups-info':
@@ -32,7 +32,7 @@ http.createServer(function(request, response) {
                 request.on('end', function() {
                     console.log("Server: groups-info received");
                     console.log("Server: groups-info with username " + userName);
-                    lights.infoGet(userName, "groups", response);
+                    lights.infoGet(host, userName, "groups", response);
                 });
         break;
         case '/control':
@@ -43,12 +43,12 @@ http.createServer(function(request, response) {
                 request.on('end', function() {
                     console.log("Server: control received");
                     console.log("Server: control with " + body);
-                    lights.controlPut(body);
+                    lights.controlPut(host, body);
                 });
         break;
         case '/create-user':
             console.log("Server: create-user received");
-            bridge.createUser(response);
+            bridge.createUser(host, response);
         break;
         case '/upload-user':
                 request.on('data', function(chunk) {
@@ -57,7 +57,7 @@ http.createServer(function(request, response) {
                 request.on('end', function() {
                     console.log("Server: upload-user received");
                     console.log("Server: upload-user with username " + userName);
-                    bridge.uploadUser(userName, response);
+                    bridge.uploadUser(host, userName, response);
                 });
         break;
         default:

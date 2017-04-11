@@ -1,9 +1,7 @@
-var  http = require("http"),
-    url = require("url"),
-    fs = require("fs");
+var  http = require("http");
 
 module.exports = {
-	controlPut: function(data){
+	controlPut: function(host, data){
 		var jsonData = JSON.parse(data);
 		var headers = {
 		    'Content-Type': 'text/json',
@@ -11,7 +9,7 @@ module.exports = {
 		};
 
 	    var options = {
-		    "host": "192.168.0.12",
+		    "host": host,
 		    "path": "/api/" + jsonData.username + "/lights/3/state",
 		    "method": "PUT",
 		    "headers": headers
@@ -20,9 +18,9 @@ module.exports = {
 		http.request(options).write(JSON.stringify(jsonData));
 	},
 
-	infoGet: function(userName, type, response){
+	infoGet: function(host, userName, type, response){
 	    var options = {
-		    "host": "192.168.0.12",
+		    "host": host,
 		    "path": "/api/" + userName + "/" +type,
 		    "method": "GET"
 		}
