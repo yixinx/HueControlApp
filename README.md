@@ -40,6 +40,22 @@ $ node server.js
 ```
 Then go to **localhost:8080**. You can start play with your Hue light! Have fun!
 
+## File Structure
+* Server.js
+* api
+  * lights.js
+  * bridge.js
+* html
+  * index.html
+* js
+  * helper.js
+  * mustache.js
+  * template.js
+* css
+  * style.css
+  
+## App Architecture
+![Image](https://github.com/yixinx/HueControlApp/blob/master/HueControlArchitecture.jpg)
 ## API
 The functions that we have in app are supported by our built in APIs. It includes:
 ### Lights
