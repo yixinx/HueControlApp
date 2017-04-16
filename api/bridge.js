@@ -27,10 +27,10 @@ module.exports = {
 		}).write(data);
 	},
 
-	uploadUser: function(host, uerName, response){
+	uploadUser: function(host, userName, response){
 	    var options = {
 		    "host": host,
-		    "path": "/api/" + uerName,
+		    "path": "/api/" + userName,
 		    "method": "GET"
 		}
 		http.request(options, function(res){
